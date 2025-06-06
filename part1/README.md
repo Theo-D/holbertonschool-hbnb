@@ -267,10 +267,13 @@ sequenceDiagram
   API -->> Client: 201 Created + user ID
 ```
 
-- **Client** sends request to API Gateway.
-- **Controller** delegates to the facade.
-- **Facade** interacts with business logic and data layer.
-- **Response** returned to the client with the item data.
+📝 Description
+- **Client**: initiates registration by submitting user and identity information.
+- **API Gateway**: handles the request and delegates to the logic layer.
+- **UserIdentity**: is instantiated and persisted as a separate entity.
+- **User**: is created and linked to the persisted identity.
+- **Database**: stores both identity and user records.
+- **API Gateway**: returns confirmation with the new user ID.
 
 #### Use case 2: `POST /places`
 
@@ -296,9 +299,13 @@ sequenceDiagram
     API-->>Host: 201 Created + place ID
 ```
 
-- **Client** submits item data.
-- **Validation** and **transformation** handled in the logic layer.
-- **Database** updated, and confirmation returned.
+📝 Description
+- **Host**: submits a request to list a new place.
+- **API Gateway**: verifies the user’s role as a host.
+- **UserDB**: is queried to confirm host identity and status.
+- **Place**: is instantiated with submitted data.
+- **PlaceDB**: stores the new place in the system.
+- **API Gateway**: confirms creation and returns the place ID.
 
 #### Use case 3: `POST /reviews`
 
@@ -324,9 +331,13 @@ sequenceDiagram
     API-->>Client: 201 Created
 ```
 
-- **Client** submits item data.
-- **Validation** and **transformation** handled in the logic layer.
-- **Database** updated, and confirmation returned.
+📝 Description
+- **Client**: submits a review linked to a completed booking.
+- **API Gateway**: validates input and ensures booking validity.
+- **BookingDB**: is queried to fetch the corresponding booking.
+- **Review**: is created based on user input and booking context.
+- **ReviewDB**: stores the new review.
+- **API Gateway**: returns a confirmation of successful submission.
 
 #### Use case 4: `GET /places`
 
@@ -343,10 +354,11 @@ sequenceDiagram
   API -->> Client: 200 OK + places data
 ```
 
-- **Client** submits item data.
-- **Validation** and **transformation** handled in the logic layer.
-- **Database** updated, and confirmation returned.
-
+📝 Description
+- **Client**: requests a list of available places, with optional filters.
+- **API Gateway**: builds and executes the query using the filters.
+- **PlaceDB**: returns all places that match the criteria.
+- **API Gateway**: responds with place data and a success status.
 ---
 
 <p style="text-align:center;">Authors: Théo DESSAIGNE & Jérôme Tran</p>
