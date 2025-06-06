@@ -7,6 +7,7 @@
 ## :checkered_flag: Introduction
 
 Welcome to the documentation for our **HBnB Project**. This document provides a comprehensive overview of the project's scope.
+
 ---
 
 ### :open_file_folder: High-Level Package Diagram
@@ -124,7 +125,7 @@ direction LR
 
 These components work together to provide a well defined abstraction of the business workings.
 
-### Translating Classes relationship to code
+### :scroll: Translating Classes relationship to code
 
 ---
 
