@@ -1,20 +1,17 @@
 # Holberton - HBnB Project - Part 1 - Project Documention
 
-## 🧭 Introduction
+## Introduction
 
-Welcome to the documentation for **[Project Name]**. This document provides a comprehensive overview of the system's architecture, business logic, and API interaction flow. It's designed to help developers, architects, and stakeholders understand the structural and functional design of the application.
-
+Welcome to the documentation for our **[HBnB Project]**. This document provides a comprehensive overview of the project's scope.
 ---
 
-## 🏗️ High-Level Architecture
-
-### 📦 Package Overview
+## High-Level Package Diagram
 
 The system follows a layered architecture, ensuring separation of concerns and maintainability. Below is a high-level package diagram illustrating the core structure:
 
-![High-Level Architecture Diagram](path/to/high-level-architecture.png)
+![High-Level Architecture Diagram](holbertonschool-hbnb/part1/diagrams/PackageDiagram.drawio.png)
 
-### 🧱 Layered Architecture
+### Layered Architecture
 
 The application is organized into the following layers:
 
@@ -22,7 +19,7 @@ The application is organized into the following layers:
 - **Business Logic Layer**: Contains core business rules and logic.
 - **Data Access Layer**: Manages persistence and data operations.
 
-### 🧩 Facade Pattern
+### Facade Pattern
 
 To reduce coupling and simplify access between layers, the **Facade Pattern** is employed. It provides a unified interface to a set of interfaces in the subsystem, making the architecture more scalable and testable.
 
