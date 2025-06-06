@@ -347,5 +347,7 @@ sequenceDiagram
 - **Validation** and **transformation** handled in the logic layer.
 - **Database** updated, and confirmation returned.
 
-<p style="text-align: center;"> Authors: Théo DESSAIGNE & Jérôme Tran </p>
-<p style="text-align: center;"> Thank you for your attention 😘 </p>
+---
+
+<p style="text-align:center;">Authors: Théo DESSAIGNE & Jérôme Tran</p>
+<p style="text-align:center;">Thank you for your attention 😘</p>
