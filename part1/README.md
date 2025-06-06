@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the documentation for our **[HBnB Project]**. This document provides a comprehensive overview of the project's scope.
+Welcome to the documentation for our **HBnB Project**. This document provides a comprehensive overview of the project's scope.
 ---
 
 ## High-Level Package Diagram
@@ -109,6 +109,8 @@ direction LR
 
 ### 📚 Entities Overview
 
+---
+
 - **User and UserIdentity**: Is used to describe an user of the service with attributes fitting its role. It is the entity around which the service revolves.
 - **Host**: Herited from the User class, his particularity is to offer a service in the form of one or more places to rent.
 - **Place**: It is the service provided by hosts. A host must owns at least one place, but can also own several.
@@ -119,6 +121,8 @@ direction LR
 These components work together to provide a well defined abstraction of the business workings.
 
 ### Translating Classes relationship to code
+
+---
 
 Relations between entities are not mere cosmetic, they serve to describe reality and, as such, help build a reliable code that translates to a real-life service.
 
@@ -220,7 +224,16 @@ if __name__ == '__main__':
 
 Which gives us the following output:
 
-![main.py output](img/mainOutput.png)
+```
+theo@PC:~/holbertonschool-hbnb/part1$ ./main.py
+Nom du lieu: Siège du PCF
+Adresse: 2, place du Colonel-Fabien
+Description: Un bâtiment avant-gardiste
+Commodités:
+__________________________________________________
+
+L'utilisateur Thierry Martin est né le 22 avril 1970 à Clermont-Ferrand
+```
 
 ## 🔁 API Interaction Flow
 
