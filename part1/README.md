@@ -278,17 +278,17 @@ sequenceDiagram
     participant UserDB
     participant PlaceDB
 
-    Host-API POST places
+    Host->API POST places
     Note right of API name, address, price, etc.
-    API-User verify host role
-    User-UserDB SELECT user
-    UserDB--User user info
+    API->User verify host role
+    User->UserDB SELECT user
+    UserDB-->User user info
 
-    API-Place create place
-    Place-PlaceDB INSERT place
-    PlaceDB--Place success
+    API->Place create place
+    Place->PlaceDB INSERT place
+    PlaceDB-->Place success
 
-    API--Host 201 Created + place ID
+    API-->Host 201 Created + place ID
 ```
 
 - **Client** submits item data.
