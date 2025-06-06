@@ -229,7 +229,7 @@ theo@PC:~/holbertonschool-hbnb/part1$ ./main.py
 Nom du lieu: Siège du PCF
 Adresse: 2, place du Colonel-Fabien
 Description: Un bâtiment avant-gardiste
-Commodités:
+Commodités: micro onde, sèche cheveux, wifi
 __________________________________________________
 
 L'utilisateur Thierry Martin est né le 22 avril 1970 à Clermont-Ferrand
@@ -239,10 +239,71 @@ L'utilisateur Thierry Martin est né le 22 avril 1970 à Clermont-Ferrand
 
 ### 📊 Sequence Diagrams
 
-The following sequence diagrams illustrate the flow of selected API calls, demonstrating interactions between components and data movement across the system:
+The following sequence diagrams illustrate the flow of API calls, demonstrating interactions between components:
 
 #### 🔍 Example: `GET /items/{id}`
 
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant User
+    participant UserIdentity
+    participant Place
+    participant Booking
+    participant Review
+    participant UserDB
+    participant PlaceDB
+    participant BookingDB
+    participant ReviewDB
+
+    %% --- User Registration ---
+    Client-API POST usersregister
+    Note right of API user info name, dob, address
+    API-UserIdentity create new identity
+    UserIdentity-UserDB INSERT identity
+    UserDB--UserIdentity success
+    API-User create new user with identity
+    User-UserDB INSERT user
+    UserDB--User success
+    API--Client 201 Created + user ID
+
+    %% --- Place Creation ---
+    Client-API POST places
+    Note right of API name, description, etc.
+    API-User verify host role
+    User-UserDB SELECT user
+    UserDB--User user details
+    API-Place create place
+    Place-PlaceDB INSERT place
+    PlaceDB--Place success
+    API--Client 201 Created + place ID
+
+    %% --- Fetching Places ---
+    Client-API GET placescapacity=2&date=...
+    API-PlaceDB SELECT  WHERE filters apply
+    PlaceDB--API list of places
+    API--Client 200 OK + place list
+
+    %% --- Booking ---
+    Client-API POST bookings
+    Note right of API user books a place
+    API-UserDB SELECT user
+    API-PlaceDB SELECT availability
+    API-Booking create booking
+    Booking-BookingDB INSERT booking
+    BookingDB--Booking success
+    API--Client 201 Created + booking ID
+
+    %% --- Review Submission ---
+    Client-API POST reviews
+    Note right of API includes rating, comment, booking ID
+    API-BookingDB SELECT booking
+    API-Review create review
+    Review-ReviewDB INSERT review
+    ReviewDB--Review success
+    API--Client 201 Created
+```
 ![Sequence Diagram - Get Item](path/to/sequence-get-item.png)
 
 - **Client** sends request to API Gateway.
