@@ -258,51 +258,51 @@ sequenceDiagram
     participant ReviewDB
 
     %% --- User Registration ---
-    Client-API POST usersregister
-    Note right of API user info name, dob, address
-    API-UserIdentity create new identity
-    UserIdentity-UserDB INSERT identity
-    UserDB--UserIdentity success
-    API-User create new user with identity
-    User-UserDB INSERT user
-    UserDB--User success
-    API--Client 201 Created + user ID
+    Client->>API: POST /users/register
+    Note right of API: user info name, dob, address
+    API->>UserIdentity: create new identity
+    UserIdentity->>UserDB: INSERT identity
+    UserDB-->>UserIdentity: success
+    API->>User: create new user with identity
+    User->>UserDB: INSERT user
+    UserDB-->>User: success
+    API-->>Client: 201 Created + user ID
 
     %% --- Place Creation ---
-    Client-API POST places
-    Note right of API name, description, etc.
-    API-User verify host role
-    User-UserDB SELECT user
-    UserDB--User user details
-    API-Place create place
-    Place-PlaceDB INSERT place
-    PlaceDB--Place success
-    API--Client 201 Created + place ID
+    Client->>API: POST /places
+    Note right of API: name, description, etc.
+    API->>User: verify host role
+    User->>UserDB: SELECT user
+    UserDB-->>User: user details
+    API->>Place: create place
+    Place->>PlaceDB: INSERT place
+    PlaceDB-->>Place: success
+    API-->>Client: 201 Created + place ID
 
     %% --- Fetching Places ---
-    Client-API GET placescapacity=2&date=...
-    API-PlaceDB SELECT  WHERE filters apply
-    PlaceDB--API list of places
-    API--Client 200 OK + place list
+    Client->>API: GET /places?capacity=2&date=...
+    API->>PlaceDB: SELECT WHERE filters apply
+    PlaceDB-->>API: list of places
+    API-->>Client: 200 OK + place list
 
     %% --- Booking ---
-    Client-API POST bookings
-    Note right of API user books a place
-    API-UserDB SELECT user
-    API-PlaceDB SELECT availability
-    API-Booking create booking
-    Booking-BookingDB INSERT booking
-    BookingDB--Booking success
-    API--Client 201 Created + booking ID
+    Client->>API: POST /bookings
+    Note right of API: user books a place
+    API->>UserDB: SELECT user
+    API->>PlaceDB: SELECT availability
+    API->>Booking: create booking
+    Booking->>BookingDB: INSERT booking
+    BookingDB-->>Booking: success
+    API-->>Client: 201 Created + booking ID
 
     %% --- Review Submission ---
-    Client-API POST reviews
-    Note right of API includes rating, comment, booking ID
-    API-BookingDB SELECT booking
-    API-Review create review
-    Review-ReviewDB INSERT review
-    ReviewDB--Review success
-    API--Client 201 Created
+    Client->>API: POST /reviews
+    Note right of API: includes rating, comment, booking ID
+    API->>BookingDB: SELECT booking
+    API->>Review: create review
+    Review->>ReviewDB: INSERT review
+    ReviewDB-->>Review: success
+    API-->>Client: 201 Created
 ```
 ![Sequence Diagram - Get Item](path/to/sequence-get-item.png)
 
