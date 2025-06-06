@@ -241,79 +241,102 @@ L'utilisateur Thierry Martin est né le 22 avril 1970 à Clermont-Ferrand
 
 The following sequence diagrams illustrate the flow of API calls, demonstrating interactions between components:
 
-#### 🔍 Example: `GET /items/{id}`
+#### 🔍 Use case 1: `POST /users/register`
 
 ```mermaid
 sequenceDiagram
-    participant Client
-    participant API
-    participant User
-    participant UserIdentity
-    participant Place
-    participant Booking
-    participant Review
-    participant UserDB
-    participant PlaceDB
-    participant BookingDB
-    participant ReviewDB
+  participant Client as Client
+  participant API as API
+  participant User as User
+  participant UserIdentity as UserIdentity
+  participant UserDB as UserDB
 
-    %% --- User Registration ---
-    Client->>API: POST /users/register
-    Note right of API: user info name, dob, address
-    API->>UserIdentity: create new identity
-    UserIdentity->>UserDB: INSERT identity
-    UserDB-->>UserIdentity: success
-    API->>User: create new user with identity
-    User->>UserDB: INSERT user
-    UserDB-->>User: success
-    API-->>Client: 201 Created + user ID
-
-    %% --- Place Creation ---
-    Client->>API: POST /places
-    Note right of API: name, description, etc.
-    API->>User: verify host role
-    User->>UserDB: SELECT user
-    UserDB-->>User: user details
-    API->>Place: create place
-    Place->>PlaceDB: INSERT place
-    PlaceDB-->>Place: success
-    API-->>Client: 201 Created + place ID
-
-    %% --- Fetching Places ---
-    Client->>API: GET /places?capacity=2&date=...
-    API->>PlaceDB: SELECT WHERE filters apply
-    PlaceDB-->>API: list of places
-    API-->>Client: 200 OK + place list
-
-    %% --- Booking ---
-    Client->>API: POST /bookings
-    Note right of API: user books a place
-    API->>UserDB: SELECT user
-    API->>PlaceDB: SELECT availability
-    API->>Booking: create booking
-    Booking->>BookingDB: INSERT booking
-    BookingDB-->>Booking: success
-    API-->>Client: 201 Created + booking ID
-
-    %% --- Review Submission ---
-    Client->>API: POST /reviews
-    Note right of API: includes rating, comment, booking ID
-    API->>BookingDB: SELECT booking
-    API->>Review: create review
-    Review->>ReviewDB: INSERT review
-    ReviewDB-->>Review: success
-    API-->>Client: 201 Created
+  Client ->> API: POST /users/register
+  Note right of API: name, address, phone, etc.
+  API ->> UserIdentity: create identity
+  UserIdentity ->> UserDB: INSERT identity
+  UserDB -->> UserIdentity: identity saved
+  API ->> User: create user with identity
+  User ->> UserDB: INSERT user
+  UserDB -->> User: user saved
+  API -->> Client: 201 Created + user ID
 ```
-![Sequence Diagram - Get Item](path/to/sequence-get-item.png)
 
 - **Client** sends request to API Gateway.
 - **Controller** delegates to the facade.
 - **Facade** interacts with business logic and data layer.
 - **Response** returned to the client with the item data.
 
-#### ➕ Example: `POST /items`
+#### ➕ Use case 2: `POST /places`
 
-![Sequence Diagram - Create Item](path/to/sequence-create-item.png)
+```mermaid
+sequenceDiagram
+    participant Host
+    participant API
+    participant User
+    participant Place
+    participant UserDB
+    participant PlaceDB
+
+    Host-API POST places
+    Note right of API name, address, price, etc.
+    API-User verify host role
+    User-UserDB SELECT user
+    UserDB--User user info
+
+    API-Place create place
+    Place-PlaceDB INSERT place
+    PlaceDB--Place success
+
+    API--Host 201 Created + place ID
+```
+
+- **Client** submits item data.
+- **Validation** and **transformation** handled in the logic layer.
+- **Database** updated, and confirmation returned.
+
+#### ➕ Use case 3: `POST /reviews`
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Booking
+    participant Review
+    participant BookingDB
+    participant ReviewDB
+
+    Client->>API: POST /reviews
+    Note right of API: booking ID, rating, comment
+
+    API->>BookingDB: SELECT booking
+    BookingDB-->>API: booking data
+
+    API->>Review: create review
+    Review->>ReviewDB: INSERT review
+    ReviewDB-->>Review: success
+
+    API-->>Client: 201 Created
+```
+
+- **Client** submits item data.
+- **Validation** and **transformation** handled in the logic layer.
+- **Database** updated, and confirmation returned.
+
+#### ➕ Use case 4: `GET /places`
+
+```mermaid
+sequenceDiagram
+  participant Client as Client
+  participant API as API
+  participant Place as Place
+  participant PlaceDB as PlaceDB
+
+  Client ->> API: GET /places
+  API ->> PlaceDB: SELECT * FROM places WHERE filters_apply
+  PlaceDB -->> API: list of matching places
+  API -->> Client: 200 OK + places data
+```
 
 - **Client** submits item data.
 - **Validation** and **transformation** handled in the logic layer.
