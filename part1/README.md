@@ -9,7 +9,7 @@ Welcome to the documentation for our **[HBnB Project]**. This document provides 
 
 The system follows a layered architecture, ensuring separation of concerns and maintainability. Below is a high-level package diagram illustrating the core structure:
 
-![High-Level Architecture Diagram](holbertonschool-hbnb/part1/diagrams/PackageDiagram.drawio.png)
+![High-Level Architecture Diagram](diagrams/PackageDiagram.drawio.png)
 
 ### Layered Architecture
 
