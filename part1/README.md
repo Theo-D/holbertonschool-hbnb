@@ -4,12 +4,12 @@
   <img src="img/hbnbLogo.png" />
 </p>
 
-## Introduction
+## :checkered_flag: Introduction
 
 Welcome to the documentation for our **HBnB Project**. This document provides a comprehensive overview of the project's scope.
 ---
 
-## High-Level Package Diagram
+### :open_file_folder: High-Level Package Diagram
 
 The system follows a layered architecture, ensuring separation of concerns and maintainability. Below is a high-level package diagram illustrating said structure:
 
@@ -17,13 +17,13 @@ The system follows a layered architecture, ensuring separation of concerns and m
 
 #### The package diagram features the following:
 
-### A Layered Architecture
+### :bricks: A Layered Architecture
 
 - **Presentation Layer**: Handles user interactions through user interface and API calls.
 - **Business Logic Layer**: Contains an abstraction of the business rules and logic.
 - **Data Access Layer**: Manages persistence and data operations.
 
-### A Facade Pattern
+### :performing_arts: A Facade Pattern
 
 - **Facade** is a structural design pattern that provides a simplified interface to a library, a framework, or any other complex set of classes.
 
@@ -111,7 +111,7 @@ direction LR
     Place o-- "0.." Amenity : features
 ```
 
-### 📚 Entities Overview
+### :mag: Entities Overview
 
 ---
 
@@ -346,4 +346,5 @@ sequenceDiagram
 - **Validation** and **transformation** handled in the logic layer.
 - **Database** updated, and confirmation returned.
 
-Thank you for your attention 😘
+<p style="text-align: center;"> Authors: Théo DESSAIGNE & Jérôme Tran </p>
+<p style="text-align: center;"> Thank you for your attention 😘 </p>
