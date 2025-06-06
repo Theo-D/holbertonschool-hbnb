@@ -1,5 +1,7 @@
 # Holberton - HBnB Project - Part 1 - Project Documention
 
+![HBnB Logo](img/hbnbLogo.png)
+
 ## Introduction
 
 Welcome to the documentation for our **HBnB Project**. This document provides a comprehensive overview of the project's scope.
@@ -342,9 +344,4 @@ sequenceDiagram
 - **Validation** and **transformation** handled in the logic layer.
 - **Database** updated, and confirmation returned.
 
----
-
-## 🧾 Appendix
-
-- All diagrams are located in the `docs/diagrams/` folder.
-- For setup instructions, see the [Getting Started Guide](./GETTING_STARTED.md).
+Thank you for your attention 😘
