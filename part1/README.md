@@ -1,6 +1,8 @@
 # Holberton - HBnB Project - Part 1 - Project Documention
 
-![HBnB Logo](img/hbnbLogo.png)
+<p align="center">
+  <img src="img/hbnbLogo.png" />
+</p>
 
 ## Introduction
 
