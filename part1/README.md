@@ -246,7 +246,7 @@ L'utilisateur Thierry Martin est né le 22 avril 1970 à Clermont-Ferrand
 
 The following sequence diagrams illustrate the flow of API calls, demonstrating interactions between components:
 
-#### 🔍 Use case 1: `POST /users/register`
+#### Use case 1: `POST /users/register`
 
 ```mermaid
 sequenceDiagram
@@ -272,7 +272,7 @@ sequenceDiagram
 - **Facade** interacts with business logic and data layer.
 - **Response** returned to the client with the item data.
 
-#### ➕ Use case 2: `POST /places`
+#### Use case 2: `POST /places`
 
 ```mermaid
 sequenceDiagram
@@ -300,7 +300,7 @@ sequenceDiagram
 - **Validation** and **transformation** handled in the logic layer.
 - **Database** updated, and confirmation returned.
 
-#### ➕ Use case 3: `POST /reviews`
+#### Use case 3: `POST /reviews`
 
 ```mermaid
 sequenceDiagram
@@ -328,7 +328,7 @@ sequenceDiagram
 - **Validation** and **transformation** handled in the logic layer.
 - **Database** updated, and confirmation returned.
 
-#### ➕ Use case 4: `GET /places`
+#### Use case 4: `GET /places`
 
 ```mermaid
 sequenceDiagram
