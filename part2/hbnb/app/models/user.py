@@ -1,4 +1,4 @@
-from base import BaseModel
+from .base import BaseModel
 import re
 from datetime import datetime
 from typing import TYPE_CHECKING
