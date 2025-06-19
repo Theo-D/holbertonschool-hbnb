@@ -1,9 +1,9 @@
-from user import User
+from .user import User
 from datetime import datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from place import Place
+    from .place import Place
 
 
 class Host(User):
@@ -18,6 +18,9 @@ class Host(User):
 
     @property
     def rating(self):
+        """
+
+        """
         if not self.__owned_places:
             raise AttributeError("Must own at least one place")
         total = 0
@@ -28,7 +31,13 @@ class Host(User):
 
 
     def add_place(self, place):
-        from place import Place
+        """
+        add_place - Adds Place object to a list of owned_places
+
+            args:
+            -place - Place object
+        """
+        from .place import Place
         if not isinstance(place, Place):
             raise TypeError("Must add a Place instance")
         # Check if added place already exist by checking existing places id in Host.owned_places[]

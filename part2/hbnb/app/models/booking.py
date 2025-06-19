@@ -1,8 +1,8 @@
-from base import BaseModel
+from .base import BaseModel
 from datetime import datetime, timedelta
-from user import User
+from .user import User
 # Check place for circular import
-from place import Place
+from .place import Place
 from typing import TYPE_CHECKING
 
 
@@ -17,6 +17,7 @@ class Booking(BaseModel):
             TypeError("Place must be of type Place")
         else:
             self.__place = place
+            place.add_booking(self)
 
         # ---------- Init capacity ---------- #
         if guest_count > self.__place.capacity:

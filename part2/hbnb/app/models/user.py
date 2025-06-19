@@ -1,10 +1,10 @@
-from base import BaseModel
+from .base import BaseModel
 import re
 from datetime import datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from booking import Booking
+    from .booking import Booking
 
 
 class User(BaseModel):
@@ -109,7 +109,7 @@ class User(BaseModel):
     # -------------------------- Methods -------------------------- #
 
     def add_booking(self, booking):
-        from booking import Booking
+        from .booking import Booking
         if not isinstance(booking, Booking):
             raise TypeError("booking must be a Booking instance")
         self.__bookings.append(booking)
