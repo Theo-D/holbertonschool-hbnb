@@ -1,10 +1,12 @@
 import sys
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restx import Api
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 import click
 from flask.cli import with_appcontext
+from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
 
 # standalone DB instance
 from .database import db
@@ -81,6 +83,9 @@ def create_app(config_class: str = "config.DevelopmentConfig") -> Flask:
     app = Flask(__name__)
     app.debug = True
 
+    # Allow Cross Origin Ressource Sharing from Localhost on port 5000
+    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5500", "http://127.0.0.1:5500"]}}, supports_credentials=True)
+
     # Load configuration
     app.config.from_object(config_class)
 
@@ -111,11 +116,18 @@ def create_app(config_class: str = "config.DevelopmentConfig") -> Flask:
         description="HBnB Application API",
         doc="/api/v1/",
         authorizations=authorizations,
-        security='BearerAuth'
+        security='BearerAuth',
+        error_404_help=False
     )
-    
+
+    # @api.errorhandler(HTTPException)
+    # def handle_http_exception(e):
+    #     response = jsonify(error=e.description)
+    #     response.status_code = e.code
+    #     return response
+
     from app.api.v1 import users, hosts, places, amenities, bookings, reviews, auth, admins
-    
+
     # ----------------------- API namespace imports ----------------------- #
     from .api.v1.ns import ns as users_ns
     from .api.v1.places import ns as places_ns

@@ -41,25 +41,30 @@ class Login(Resource):
 
         # Try User first
         user = facade.get_user_by_email(email)
-        if user and user.check_password(password):
-            identity = str(user.id)  # ✅ cast to string
-            claims = {"is_admin": user.is_admin}
-            access_token = create_access_token(identity=identity, additional_claims=claims)
-            refresh_token = create_refresh_token(identity=identity, additional_claims=claims)
-            return {"access_token": access_token, "refresh_token": refresh_token}, 200
+        if user:
+            if user.check_password(password):
+                identity = str(user.id)
+                claims = {"is_admin": user.is_admin}
+                access_token = create_access_token(identity=identity, additional_claims=claims)
+                refresh_token = create_refresh_token(identity=identity, additional_claims=claims)
+                return {"access_token": access_token, "refresh_token": refresh_token}, 200
+            else:
+                ns.abort(401, "Incorrect password")
+        else:
+            # Check for Host
+            try:
+                host = facade.get_host_by_email(email)
+            except AttributeError:
+                host = None
 
-        # Try Host
-        try:
-            host = facade.get_host_by_email(email)
-        except AttributeError:
-            host = None
-
-        if host and host.check_password(password):
-            identity = str(host.id)  # ✅ cast to string
-            claims = {"is_admin": host.is_admin}
-            access_token = create_access_token(identity=identity, additional_claims=claims)
-            refresh_token = create_refresh_token(identity=identity, additional_claims=claims)
-            return {"access_token": access_token, "refresh_token": refresh_token}, 200
-
-        # If neither matched
-        ns.abort(401, "Invalid credentials")
+            if host:
+                if host.check_password(password):
+                    identity = str(host.id)
+                    claims = {"is_admin": host.is_admin}
+                    access_token = create_access_token(identity=identity, additional_claims=claims)
+                    refresh_token = create_refresh_token(identity=identity, additional_claims=claims)
+                    return {"access_token": access_token, "refresh_token": refresh_token}, 200
+                else:
+                    ns.abort(401, "Incorrect password")
+            else:
+                ns.abort(401, "Incorrect Email")
