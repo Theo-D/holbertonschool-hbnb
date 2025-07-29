@@ -4,29 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of Places</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <header>
-        <img src="images/logo.png" alt="HbnB logo" class="logo">
-        <nav>
-            <a href="login.html" id="login-link" class="login-button">Login</a>
-        </nav>
+    <header class="header">
+        <a href="index.html" id="logo">
+            <img src="images/logo.png" alt="HbnB logo" class="logo">
+        </a>
+        <div id="login-link">
+            <button id="login-button" type="button">Login</button>
+        </div>
+        <div id="logout-link">
+            <button id="logout-button" type="button">Logout</button>
+        </div>
     </header>
     <main>
         <section id="filter">
-            <label for="price-filter">Max Price:</label>
-            <select id="price-filter">
-                <!-- Options will be populated dynamically -->
-            </select>
+            <div id="slide-filter">
+                <!-- Slider created dynamically -->
+            </div>
         </section>
         <section id="places-list">
             <!-- List of places will be populated dynamically -->
+             <!-- Placeholder place list -->
+
+            <!-- <div class="grid-container">
+                <div class="place-card">
+                    <h3>Place 1 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 2 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 1 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 2 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 1 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 2 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 1 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+                <div class="place-card">
+                    <h3>Place 2 Title</h3>
+                    <p>Price per night</p>
+                    <button class="details_button" type="button">View details</button>
+                </div>
+            </div> -->
         </section>
     </main>
-    <script src="scripts.js"></script>
     <footer>
         <p id="footer_copyright">© 2025 Théo DESSAIGNE. All rights reserved</p>
     </footer>
+    <script src="scripts/scripts.js"></script>
 </body>
 </html>

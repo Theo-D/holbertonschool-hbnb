@@ -4,26 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
+    <header class="header">
+        <a href="index.html" id="logo">
+            <img src="images/logo.png" alt="HbnB logo" class="logo">
+        </a>
+        <div id="login-link">
+            <button >Login</button>
+        </div>
+    </header>
     <main>
         <section id="place-details">
             <!-- Place details will be populated dynamically -->
+             <div class="place-details">
+                <p class="place-info">Place Host</p>
+                <p class="place-info">Place Price</p>
+                <p class="place-info">Place Desc</p>
+                <ul class="place-info">
+                    <li>Place amenity 1</li>
+                    <li>Place amenity 2</li>
+                    <li>Place amenity 3</li>
+                </ul>
+             </div>
         </section>
         <section id="reviews">
             <!-- Reviews will be populated dynamically -->
+            <ul>
+                <li>
+                    <div class="review-card">
+                        <h4>Username 1</h4>
+                        <p>This is a comment about a Place</p>
+                        <a>Rating</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="review-card">
+                        <h4>Username 1</h4>
+                        <p>This is a comment about a Place</p>
+                        <a>Rating</a>
+                    </div>
+                </li>
+             </ul>
         </section>
         <section id="add-review">
             <h2>Add a Review</h2>
             <form id="review-form">
                 <label for="review-text">Review:</label>
                 <textarea id="review-text" name="review-text" required></textarea>
-                
+
                 <button type="submit">Submit</button>
             </form>
         </section>
     </main>
-    <script src="scripts.js"></script>
+    <footer>
+        <p id="footer_copyright">© 2025 Théo DESSAIGNE. All rights reserved</p>
+    </footer>
+    <script src="scripts/scripts.js"></script>
 </body>
 </html>
