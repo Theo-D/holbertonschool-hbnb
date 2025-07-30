@@ -14,3 +14,4 @@ class Booking(BaseModel):
 
     user = db.relationship('User', back_populates='bookings')
     place = db.relationship('Place', back_populates='bookings')
+    review = db.relationship('Review', uselist=False, back_populates='booking')

@@ -79,11 +79,6 @@ class HostDetail(Resource):
         host = facade.get_host(host_id)
         if not host:
             ns.abort(404, f"Host {host_id} not found")
-        claims = get_jwt()
-        caller = get_jwt_identity()
-        if not claims.get("is_admin"):
-            if caller != host_id or not isinstance(host, Host):
-                ns.abort(403, "Unauthorized action")
         return host, 200
 
     @jwt_required()

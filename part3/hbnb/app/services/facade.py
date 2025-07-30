@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, date
+from app import db
 from flask import abort
 from dateutil.parser import parse
 
@@ -36,7 +37,14 @@ class HBnBFacade:
         return self.user_repo.get(uid)
 
     def list_users(self):
-        return self.user_repo.get_all() + self.host_repo.get_all()
+        users = self.user_repo.get_all()
+        hosts = self.host_repo.get_all()
+
+        user_map = {user.id: user for user in users}
+        for host in hosts:
+            user_map[host.id] = host
+
+        return list(user_map.values())
 
     def get_user_by_email(self, email):
         return next((u for u in self.list_users() if u.email.lower() == email.lower()), None)
@@ -122,8 +130,16 @@ class HBnBFacade:
         place = self.get_place(pid)
         if not place:
             return None
+
+        amenity_ids = data.pop("amenity_ids", None)
+        if amenity_ids is not None:
+            amenities = self.amenity_repo.get_by_ids(amenity_ids)
+            place.amenities = amenities
+
         for k, v in data.items():
             setattr(place, k, v)
+
+        db.session.commit()  # ✅ Must commit after assigning relationship
         return place
 
     def delete_place(self, pid):
@@ -235,7 +251,7 @@ class HBnBFacade:
             raise ValueError("Booking not found")
         if booking_obj.review:
             raise ValueError("This booking already has a review")
-    
+
         review_obj = booking_obj.user.leave_review(
             booking_obj,
             data.get("text"),
@@ -252,12 +268,7 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def update_review(self, rid, data):
-        review = self.get_review(rid)
-        if not review:
-            return None
-        for k, v in data.items():
-            setattr(review, k, v)
-        return review
+        return self.review_repo.update(rid, data)
 
     def delete_review(self, rid):
         self.review_repo.delete(rid)

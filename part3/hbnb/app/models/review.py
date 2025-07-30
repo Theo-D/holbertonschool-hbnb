@@ -12,4 +12,4 @@ class Review(BaseModel):
 
     user = db.relationship("User", back_populates="reviews")
     place = db.relationship("Place", back_populates="reviews")
-    booking = db.relationship("Booking", backref="review")
+    booking = db.relationship('Booking', back_populates='review')

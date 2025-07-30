@@ -1,5 +1,6 @@
 from flask_restx import Resource, marshal
-from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended.exceptions import NoAuthorizationError
 from app.services.facade import facade
 from .models import EMAIL_RE, user_model, user_create, user_update
 from flask import request
@@ -48,8 +49,14 @@ class UserList(Resource):
         email = data.get("email", "").strip().lower()
         pwd = data.get("password", "")
 
-        claims = get_jwt()
-        caller_is_admin = claims.get("is_admin", False)
+        try:
+        # ✅ Check if JWT exists (optional)
+            verify_jwt_in_request(optional=True)
+            claims = get_jwt()
+            caller_is_admin = claims.get("is_admin", False)
+        except NoAuthorizationError:
+        # ✅ No token provided: assume anonymous user
+            pass
 
         is_admin = bool(data.get("is_admin", False)) if caller_is_admin else False
 
@@ -82,10 +89,7 @@ class UserResource(Resource):
         user = facade.get_user(user_id)
         if not user:
             ns.abort(404, f"User {user_id} not found")
-        claims = get_jwt()
-        caller = get_jwt_identity()
-        if caller != user_id and not claims.get("is_admin"):
-            ns.abort(403, "Unauthorized action")
+
         return user, 200
 
     @jwt_required()

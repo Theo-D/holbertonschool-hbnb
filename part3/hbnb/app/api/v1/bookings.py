@@ -20,6 +20,14 @@ booking_input = ns.model(
     }
 )
 
+review_output = ns.model(
+    "Review",
+    {
+        "text": fields.String(description="Text of the review"),
+        "rating": fields.Integer(description="Rating given in the review"),
+    }
+)
+
 booking_output = ns.model(
     "Booking",
     {
@@ -30,6 +38,7 @@ booking_output = ns.model(
         "end_date": fields.Date(description="Check-out date"),
         "guest_count": fields.Integer(description="Number of guests"),
         "total_price": fields.Float(description="Total price for the stay"),
+        "review": fields.Nested(review_output, description="Associated review, if any", allow_null=True)
     }
 )
 
@@ -64,7 +73,12 @@ class Bookings(Resource):
                 "start_date": booking.start_date,
                 "end_date": booking.end_date,
                 "guest_count": booking.guest_count,
-                "total_price": booking.total_price
+                "total_price": booking.total_price,
+                "review": {
+                    "text": booking.review.text,
+                    "rating": booking.review.rating
+                }
+                if getattr(booking, "review", None) else None
             })
         return result, 200
 
@@ -140,7 +154,11 @@ class BookingResource(Resource):
             "start_date": booking.start_date,
             "end_date": booking.end_date,
             "guest_count": booking.guest_count,
-            "total_price": booking.total_price
+            "total_price": booking.total_price,
+            "review": {
+                "text": booking.review.text,
+                "rating": booking.review.rating
+            } if getattr(booking, "review", None) else None
         }, 200
 
 

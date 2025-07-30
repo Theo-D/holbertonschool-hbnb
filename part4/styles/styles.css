@@ -16,13 +16,17 @@ html {
 }
 
 :root {
-	--color-primary: #d73953;
 	--color-black: #090909;
 	--color-white: #ffffff;
 	--color-light-grey: #f3f3f3;
 	--color-dark-grey: #353535;
 	--text-color: var(--color-black);
 	--text-error-color : #ff0033;
+
+	--color-bg-light: #eeeeee;
+	--color-bg-panel: #e7dbdb;
+	--color-primary: #d25d5d;
+	--color-accent: #b9375d;
 
 	--font-family-base: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     --font-family-title: "Raleway", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
@@ -85,12 +89,16 @@ html {
 }
 
 body {
-    background-color: #f4f4f4;
+    background-color: var(--color-bg-light);
     color: #333;
+	display: flex;
+  	flex-direction: column;
+	min-height: 100vh;
+  	margin: 0;
 }
 
 header {
-    background-color: #333;
+    background-color: var(--color-primary);
     color: #fff;
     padding: 1rem;
 }
@@ -112,30 +120,75 @@ ul {
     overflow: hidden;
   }
 
+  ul.place-info > li {
+	color: var(--color-dark-grey);
+  }
+
   li {
     display: block;
-    color: white;
-    text-align: center;
-    padding: 16px;
     text-decoration: none;
   }
 
-  .place-card, .review-card {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #ddd;
-    text-align: center;
+.place-card, .review-card {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-accent);
+  border-radius: 10px;
+  background-color: var(--color-bg-panel);
+  text-align: center;
+
+  /* Removed margin – grid gap handles spacing */
+  padding: 10px;
+
+  width: 100%; /* Take full width of grid column */
+  max-width: none; /* Prevent limiting width inside the grid */
+}
+
+.place-card *, .review-card * {
+	margin-top: 10px;
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    background-color: var(--color-primary);
-    padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 40px;            /* spacing between cards */
+  padding-top: 20px;
+  padding-left: 15vw;
+  padding-right: 15vw;      /* spacing from container edges */
+  justify-items: center; /* center cards in their grid cells */
 }
+
+#popup-form {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  top: 0;
+  left: 0;
+  width: 80vw; /* Adjust width as needed */
+  height: 80vh; /* Adjust height as needed */
+  margin: auto;
+  background-color: var(--color-bg-light);
+  z-index: 1000; /* Ensure it's on top */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  overflow: auto;
+  inset: 0; /* Center it both vertically and horizontally */
+  border-radius: 10px;
+}
+
+#popup-bg {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Below the form */
+}
+
+#amenities-header {
+	margin-top: 10px;
+}
+
 
 #login-link, #logout-link {
 	display: flex;

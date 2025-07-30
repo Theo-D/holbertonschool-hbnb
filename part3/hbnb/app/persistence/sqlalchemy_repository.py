@@ -21,12 +21,16 @@ class SQLAlchemyRepository(Repository):
             for key, val in data.items():
                 setattr(obj, key, val)
             db.session.commit()
+        return obj
 
     def delete(self, obj_id):
         obj = self.get(obj_id)
         if obj:
             db.session.delete(obj)
             db.session.commit()
+
+    def get_by_ids(self, id_list):
+        return self.model.query.filter(self.model.id.in_(id_list)).all()
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter_by(**{attr_name: attr_value}).first()

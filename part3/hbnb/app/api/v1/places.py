@@ -48,7 +48,7 @@ amenity_model = ns.model(
     }
 )
 
-@ns.route("/")
+@ns.route("")
 class PlaceList(Resource):
     @ns.doc(
         "list_places",
@@ -105,6 +105,7 @@ class PlaceList(Resource):
         place.amenity_ids = [a.id for a in getattr(place, "amenities", [])]
         return marshal(place, place_model), 201
 
+@jwt_required
 @ns.route("/<string:place_id>")
 @ns.response(404, "Place not found")
 class PlaceDetail(Resource):
@@ -225,13 +226,16 @@ class PlaceRating(Resource):
             and isinstance(r.rating, (int, float, str))
         ]
         if not ratings:
-            return {"error": f"No ratings found for place {place_id}"}, 404
-        return {"place_id": place_id, "average_rating": sum(ratings) / len(ratings)}, 200
+            return {
+                "message": f"No ratings yet for place {place_id}",
+                "ratings": []
+            }, 200
+        return {"place_id": place_id, "average_rating": float(sum(ratings) / len(ratings))}, 200
 
 @ns.route("/<string:place_id>/bookings")
 @ns.response(404, "Place not found")
 class PlaceBookings(Resource):
-    @jwt_required(optional=True)
+    @jwt_required()
     @ns.doc(
         "list_place_bookings",
         description="List all bookings for a place (Owners, Admins or Public?)",
@@ -245,11 +249,6 @@ class PlaceBookings(Resource):
         place = facade.get_place(place_id)
         if not place:
             ns.abort(404, f"Place {place_id} not found")
-
-        # Optional: enforce owner/admin if you don’t want these public
-        caller = get_jwt_identity(); claims = get_jwt()
-        if place.host.id != caller and not claims.get("is_admin"):
-            ns.abort(403, "Unauthorized action")
 
         bookings = facade.list_bookings_for_place(place_id)
         return bookings, 200
