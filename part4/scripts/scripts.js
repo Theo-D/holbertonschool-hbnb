@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function loginUi(isAuth) {
     const loginLink = document.getElementById('login-link');
     const logoutLink = document.getElementById('logout-link');
-    loginLink
 
     if (!isAuth) {
       if (logoutLink && loginLink) {
@@ -164,14 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayPlaces(places) {
       const placesList = document.getElementById('places-list');
       const placeGrid = document.createElement('div');
-      placesList.innerHTML = '';
 
+      placesList.innerHTML = '';
       placeGrid.className = 'grid-container';
       placesList.appendChild(placeGrid);
 
       places.forEach(place => {
         const placeElement = document.createElement('div');
         const detailsDiv = document.createElement('div');
+
         placeElement.className = 'place-card';
         placeElement.innerHTML = `
           <h3>${place.title}</h3>
@@ -440,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function displayReviews(reviews) {
       const reviewGrid = document.createElement('div');
       reviewGrid.className = 'grid-container'
-
       if (reviews.length === 0) {
         // Affiche un message s'il n'y a pas de revue.
         return
@@ -670,8 +669,150 @@ document.addEventListener('DOMContentLoaded', () => {
     makePopupForm(currPlaceId)
 
   }
+/*------------------------------ Review page functions ------------------------------*/
+  if (window.location.pathname.endsWith("/bookings.html")){
+
+    function getUserIdFromCookie() {
+      const token = getCookie('token');
+      console.log(token);
+
+      if (token.length > 0) {
+        try {
+            jwt = JSON.parse(atob(token.split('.')[1]));
+            const UUID = jwt.sub;
+            console.log(UUID);
+            return UUID;
+        } catch (e) {
+            console.log('error: '+e);
+        }
+      };
+    };
+
+    async function getUserBookings() {
+      const userId = getUserIdFromCookie();
+      const token = getCookie('token');
+      const url = `http://localhost:5000/api/v1/users/${userId}/bookings`;
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+
+        });
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        return json
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    async function displayBookings() {
+      const userBookings = document.getElementById('user-bookings');
+      const gridContainer = document.createElement('div');
+      const bookings = await getUserBookings();
+
+      gridContainer.classList.add('grid-container');
+
+      bookings.forEach(booking => {
+        const bookingDiv = document.createElement('div');
+        const startDate = document.createElement('p');
+        const endDate = document.createElement('p');
+        const guestCount = document.createElement('p');
+        const totalPrice = document.createElement('p');
+
+        bookingDiv.classList.add('booking-card');
+
+        startDate.textContent = `Date Checkin: ${booking.start_date}`;
+        endDate.textContent = `Date Checkout: ${booking.end_date}`;
+        guestCount.textContent = `Nombre d'invités: ${booking.guest_count}`;
+        totalPrice.textContent = `Prix du séjour: ${booking.total_price} €`;
+
+        bookingDiv.appendChild(startDate);
+        bookingDiv.appendChild(endDate);
+        bookingDiv.appendChild(guestCount);
+        bookingDiv.appendChild(totalPrice);
+        console.log(`Booking id: ${booking.id}`);
+        // Review (in its own div)
+        const reviewDiv = document.createElement('div');
+        reviewDiv.classList.add('review-section');
+
+        if (booking.review) {
+          const reviewText = document.createElement('p');
+          reviewText.textContent = `Votre avis: ${booking.review.text}`;
+
+          const reviewRating = document.createElement('p');
+          reviewRating.textContent = `Note: ${booking.review.rating}/5`;
+
+          reviewDiv.appendChild(reviewText);
+          reviewDiv.appendChild(reviewRating);
+        } else {
+          const reviewPrompt = document.createElement('a');
+          reviewPrompt.href = `add_review.html?booking_id=${booking.id}`; // Replace with actual link to leave a review
+          reviewPrompt.textContent = "Donnez votre avis";
+          reviewDiv.appendChild(reviewPrompt);
+        }
+
+        userBookings.appendChild(gridContainer);
+        gridContainer.appendChild(bookingDiv);
+        bookingDiv.appendChild(reviewDiv);
+      });
+    }
+
+    displayBookings();
+  };
 
 });
+
+/*------------------------------ Add Review page functions ------------------------------*/
+
+if (/\/add_review(\.html)?$/.test(window.location.pathname)) {
+
+
+  async function addReview(bookingId, reviewText, reviewRating) {
+    const url = "http://localhot:5000/api/v1/reviews";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          booking_id: bookingId,
+          text: reviewText,
+          rating: reviewRating
+        }),
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  document.getElementById("submit-review").addEventListener('click', function(event) {
+    event.preventDefault();
+    const bookingId = window.location.search.split('=')[1];
+    const reviewText = document.getElementById("review").value;
+    const rating = parseInt(document.getElementById("rating").value);
+
+    console.log("Booking id: ", bookingId);
+    console.log("Review: ", reviewText);
+    console.log(typeof rating);
+    console.log("Rating: ", rating);
+  });
+};
+
+
 /*------------------------------ Additionnal Event Listeners ------------------------------*/
 
   // Index page's places detail button

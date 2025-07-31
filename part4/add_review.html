@@ -13,6 +13,9 @@
         <a href="index.html" id="logo">
             <img src="images/logo.png" alt="HbnB logo" class="logo">
         </a>
+        <nav>
+            <a href="bookings.html" id="bookings-link">Vos réservations</a>
+        </nav>
         <div id="login-link">
             <button id="login-button" type="button">Login</button>
         </div>
@@ -23,14 +26,20 @@
     <main>
         <!-- Add something to idfentify the place you're reviewing -->
         <form id="review-form">
-            <h2>Add a Review</h2>
-            <label for="review">Your Review:</label>
+            <h2>Votre avis compte pour nous</h2>
+            <label for="review">Votre avis:</label>
             <textarea id="review" name="review" required></textarea>
             <label for="rating">Rating:</label>
             <select id="rating" name="rating" required>
-                <!-- Options for rating -->
+                <option value="">Note</option>
+                <option value=0>0</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
             </select>
-            <button type="submit">Submit Review</button>
+            <button id="submit-review" type="submit">Submit Review</button>
         </form>
     </main>
     <footer>

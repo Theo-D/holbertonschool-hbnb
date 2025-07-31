@@ -135,15 +135,16 @@ class UserResource(Resource):
         facade.delete_user(user_id)
         return "", 204
 
+
 @ns.route("/<string:user_id>/bookings")
 @ns.response(404, "User not found")
 class UserBookings(Resource):
-    @jwt_required()
     @ns.doc(
         "list_user_bookings",
         description="List all bookings made by a user (Self or Admin)",
         security='BearerAuth'
     )
+    @jwt_required(optional=True)
     @ns.marshal_list_with(booking_output)      # import booking_output from bookings.py
     @ns.response(403, "Unauthorized action")
     def get(self, user_id):
@@ -157,11 +158,12 @@ class UserBookings(Resource):
 
         # 2) enforce self-or-admin
         caller = get_jwt_identity()
+        print(user_id == caller)
         claims = get_jwt()
         if caller != user_id and not claims.get("is_admin"):
             ns.abort(403, "Unauthorized action")
 
         # 3) list bookings via facade
-        bookings = facade.list_bookings_for_user(user_id)
+        bookings = facade.get_bookings_by_user(user_id)
         # 4) return marshaled
         return bookings, 200

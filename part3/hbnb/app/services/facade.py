@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import date
 from app import db
 from flask import abort
 from dateutil.parser import parse
@@ -48,6 +48,9 @@ class HBnBFacade:
 
     def get_user_by_email(self, email):
         return next((u for u in self.list_users() if u.email.lower() == email.lower()), None)
+
+    def get_bookings_by_user(self, uid):
+        return self.booking_repo.model.query.filter_by(user_id=uid).all()
 
     def update_user(self, uid, data):
         user = self.get_user(uid)
