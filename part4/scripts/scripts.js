@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = await getUserById(getUserIdFromCookie());
 
     if (greeting) {
-      const greetText = document.createTextNode(`Bonjour ${user.first_name} ${user.last_name}`);
+      const greetText = document.createTextNode(`Hello ${user.first_name} ${user.last_name}`);
       greeting.appendChild(greetText);
     }
 
@@ -239,20 +239,20 @@ document.addEventListener('DOMContentLoaded', () => {
         placeElement.innerHTML = `
           <h3>${place.title}</h3>
           <p>${place.price}€ la nuit.</p>
-          <button class="details_button" data-id="${place.id}" type="button">Voir détails</button>
+          <button class="details_button" data-id="${place.id}" type="button">Details</button>
         `;
 
         detailsDiv.className = 'details-display';
         detailsDiv.innerHTML = `
         <h4>Description:</h4>
         <p>${place.description}</p>
-        <button class="details-page-btn" data-id="${place.id}" type="button">Consulter ce lieu</button>
+        <button class="details-page-btn" data-id="${place.id}" type="button">Check this place</button>
         `;
         placeElement.appendChild(detailsDiv);
 
         if (detailsVisibleSet.has(String(place.id))) {
         detailsDiv.style.display = 'block';
-        placeElement.querySelector('.details_button').textContent = 'Masquer détails';
+        placeElement.querySelector('.details_button').textContent = 'Hide details';
         }
 
         placeGrid.appendChild(placeElement);
@@ -493,11 +493,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       amenitiesList.className = 'class-info';
       amenitiesHeader.id = "amenities-header";
-      amenitiesHeader.innerHTML = "Commodités à disposition";
+      amenitiesHeader.innerHTML = "Amenities available";
 
       if (amenities.length === 0) {
         amenitiesHeader.innerHTML = "";
-        amenitiesHeader.innerHTML = "Ce logement ne propose pas de commodités";
+        amenitiesHeader.innerHTML = "This place does not provide amenities";
         placeDetailsClass[0].appendChild(amenitiesHeader);
       }
 
@@ -520,11 +520,11 @@ document.addEventListener('DOMContentLoaded', () => {
       placeInfos.className = 'place-infos';
       placeInfos.innerHTML = `
         <h3 id="place-title">${place.title}</h3>
-        <p class="place-info">Hôte du logement: ${host.first_name} ${host.last_name}</p>
-        <p class="place-info">Prix par nuit: ${place.price}</p>
+        <p class="place-info">Host of the Place: ${host.first_name} ${host.last_name}</p>
+        <p class="place-info">Price per night: ${place.price}</p>
         <p class="place-info">Description: ${place.description}</p>
         <p class="place-info">
-            Note des utilisateurs: ${rating?.average_rating != null ? `${rating.average_rating.toFixed(1)}/5` : "Pas encore d'évaluation"}
+            Users rating: ${rating?.average_rating != null ? `${rating.average_rating.toFixed(1)}/5` : "No ratings yet"}
         </p>
       `;
 
@@ -593,13 +593,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       popupBg.id = 'popup-bg';
       form.id = 'popup-form';
-      labelGuests.textContent = 'Nombre de personnes';
+      labelGuests.textContent = 'Number of guests';
       selectGuests.id = 'select-guests';
       selectGuests.name = 'guestCount';
-      labelDate.textContent = "Date d'arrivée";
+      labelDate.textContent = "Checkin date";
       inputDate.type = 'date';
       inputDate.name = 'checkin';
-      labelNights.textContent = 'Nombre de nuités';
+      labelNights.textContent = 'Number of nights stayed';
       inputNights.type = 'number';
       inputNights.name = 'nightCount';
       submitButton.type = 'submit';
@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!form.querySelector('.error-text')) {
               const errMsg = document.createElement('p');
               errMsg.classList.add('error-text');
-              errMsg.textContent = "Veuillez renseigner tous les champs";
+              errMsg.textContent = "Please complete all fields";
               form.appendChild(errMsg);
             }
             hasError = true;
@@ -654,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data[key] < 1) {
               const errMsg = document.createElement('p');
               errMsg.classList.add('error-text');
-              errMsg.textContent = "Veuillez réserver une nuit minimum";
+              errMsg.textContent = "Please book at least one night";
               form.appendChild(errMsg);
               hasError = true;
             }
@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userDate < today) {
               const errMsg = document.createElement('p');
               errMsg.classList.add('error-text');
-              errMsg.textContent = "La date d'arrivée ne peut pas être antérieure à aujourd'hui.";
+              errMsg.textContent = "Checkin date can't be past.";
               form.appendChild(errMsg);
               hasError = true;
             }
@@ -691,7 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnSection.id = 'booking-button';
       btnSection.innerHTML = `
         <div id="make-booking">
-            <button class="booking-button" data-id="${currPlaceId}" type="button">Réserver ce lieu</button>
+            <button class="booking-button" data-id="${currPlaceId}" type="button">Book this place</button>
         </div>
       `;
 
@@ -748,10 +748,10 @@ document.addEventListener('DOMContentLoaded', () => {
         bookingDiv.classList.add('booking-card');
 
         placeTitle.textContent = place.title;
-        startDate.textContent = `Date Checkin: ${booking.start_date}`;
-        endDate.textContent = `Date Checkout: ${booking.end_date}`;
-        guestCount.textContent = `Nombre d'invités: ${booking.guest_count}`;
-        totalPrice.textContent = `Prix du séjour: ${booking.total_price} €`;
+        startDate.textContent = `Checking date: ${booking.start_date}`;
+        endDate.textContent = `Checkout Date: ${booking.end_date}`;
+        guestCount.textContent = `Guest count: ${booking.guest_count}`;
+        totalPrice.textContent = `Total price: ${booking.total_price} €`;
 
         bookingDiv.appendChild(placeTitle);
         bookingDiv.appendChild(startDate);
@@ -764,10 +764,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (booking.review) {
           const reviewText = document.createElement('p');
-          reviewText.textContent = `Votre avis: ${booking.review.text}`;
+          reviewText.textContent = `Your opinion: ${booking.review.text}`;
 
           const reviewRating = document.createElement('p');
-          reviewRating.textContent = `Note: ${booking.review.rating}/5`;
+          reviewRating.textContent = `Rating: ${booking.review.rating}/5`;
 
           reviewDiv.appendChild(reviewText);
           reviewDiv.appendChild(reviewRating);
@@ -775,10 +775,10 @@ document.addEventListener('DOMContentLoaded', () => {
           const reviewPrompt = document.createElement('a');
           const deleteBtn = document.createElement('a');
           reviewPrompt.href = `add_review.html?booking_id=${booking.id}`;
-          reviewPrompt.textContent = "Donnez votre avis";
+          reviewPrompt.textContent = "Give us your opinion";
           deleteBtn.href = '#';
           deleteBtn.classList.add('delete-btn');
-          deleteBtn.textContent = "Annulez votre réservation";
+          deleteBtn.textContent = "Cancel this booking";
           deleteBtn.dataset.id = booking.id;
 
           deleteBtn.addEventListener('click', async function(event) {
@@ -865,28 +865,28 @@ document.addEventListener('DOMContentLoaded', () => {
           // Check status and display specific message
           switch (response.status) {
             case 400:
-              throw new Error("Requête invalide (400) : Veuillez vérifier votre avis.");
+              throw new Error("Requête invalide (400) : Invalid informations");
             case 401:
-              throw new Error("Non autorisé (401) : Veuillez vous reconnecter.");
+              throw new Error("Non autorisé (401) : Please reconnect.");
             case 403:
-              throw new Error("Accès refusé (403) : Vous n'avez pas les droits.");
+              throw new Error("Accès refusé (403) : No rights.");
             case 404:
-              throw new Error("Ressource non trouvée (404).");
+              throw new Error("Not found (404).");
             case 409:
-              throw new Error("Conflit (409) : Avis déjà existant.");
+              throw new Error("Conflit (409) : Already existing review.");
             case 500:
-              throw new Error("Erreur serveur (500) : Réessayez plus tard.");
+              throw new Error("Erreur serveur (500) : Try again later.");
             default:
-              throw new Error(`Erreur inconnue : ${response.status}`);
+              throw new Error(`Unknown error : ${response.status}`);
           }
         }
 
         const json = await response.json();
-        displayMessage("Merci pour votre avis.");
+        displayMessage("Thank you for your opinion");
         return true;
 
       } catch (error) {
-        console.error("Erreur lors de l'envoi de l'avis :", error.message);
+        console.error("Error while sending review :", error.message);
         displayMessage(error.message); // Function to show error to user
         return false;
       }
@@ -903,12 +903,12 @@ document.addEventListener('DOMContentLoaded', () => {
       errMsgRat.textContent = '';
 
       if (isNaN(rating)) {
-        errMsgRat.textContent = "Veuillez sélectionner une note.";
+        errMsgRat.textContent = "Please give a rating";
         reviewForm.appendChild(errMsgRat);
       };
 
       if (reviewText.length === 0 || reviewText === null) {
-        errMsgRev.textContent = "Veuillez donner votre avis.";
+        errMsgRev.textContent = "Please give us your opinion";
         reviewForm.appendChild(errMsgRev);
       };
 
@@ -934,11 +934,11 @@ document.addEventListener('click', function(event) {
 
     if (isVisible) {
       detailsDiv.classList.remove('visible');
-      detailsButton.textContent = 'Voir détails';
+      detailsButton.textContent = 'See details';
       detailsVisibleSet.delete(placeId);
     } else {
       detailsDiv.classList.add('visible');
-      detailsButton.textContent = 'Masquer détails';
+      detailsButton.textContent = 'Hide details';
       detailsVisibleSet.add(placeId);
     }
   }
