@@ -52,6 +52,7 @@ User first needs to login to be able to see places, there's a **login button** o
 
 
 Once the button is clicked, the user is prompted to enter credentials to be able to use the website, that's where the credentials provided earlier will come in handy. Choose one an login!
+
 <picture>
  <img alt="login_pager" src="./part1/img/login_page.png" width = "600">
 </picture>
