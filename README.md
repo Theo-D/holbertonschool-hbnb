@@ -23,11 +23,11 @@ From here you can now run the backend server with `python3 part3/hbnb/run.py`.
 
 Now you can start the front end server (In this exemple, we use the **live server extension** from VS Code on `holbertonschool-hbnb/part4/index.html`).
 
-:bangbang: Be mindful that your backend server should be runing on the port 5000 and your frontend server on the port 5500 alse you might encounter **CORS** errors.
-
 <picture>
  <img alt="starting live server" src="./part1/img/live_server_start.png" width = "400">
 </picture>
+
+:bangbang: Be mindful that your backend server should be runing on the port 5000 and your frontend server on the port 5500 alse you might encounter **CORS** errors.
 
 To test the feature you will need to log to an account. Below are 3 accounts already in database that you can use, each with their respective role:
 
