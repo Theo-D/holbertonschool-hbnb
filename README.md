@@ -43,6 +43,7 @@ To test the feature you will need to log to an account. Below are 3 accounts alr
 ### Features
 
 User first needs to login to be able to see places, there's a **login button** on the top right corner just for such a purpose:
+
 <picture>
  <img alt="logged_out_front_page" src="./part1/img/logged_out_front_page.png" width = "400">
 </picture>
