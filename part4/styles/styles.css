@@ -1,177 +1,112 @@
-/*
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks.
-  You'll probably need to override some of theese styles.
-*/
-
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-html {
-	transition: smooth;
-}
+/* Importing fonts (optional) */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Raleway:wght@400;700&display=swap');
 
 :root {
-	--color-black: #090909;
-	--color-white: #ffffff;
-	--color-light-grey: #f3f3f3;
-	--color-dark-grey: #353535;
-	--text-color: var(--color-black);
-	--text-error-color : #ff0033;
+  /* Color Palette */
+  --primary-color: #d25d5d;
+  --accent-color: #b9375d;
+  --bg-light: #f8f8f8;
+  --bg-panel: #ffffff;
+  --text-dark: #333;
+  --text-light: #fff;
+  --error-color: #ff0033;
 
-	--color-bg-light: #eeeeee;
-	--color-bg-panel: #e7dbdb;
-	--color-primary: #d25d5d;
-	--color-accent: #b9375d;
+  /* Typography */
+  --font-base: 'Open Sans', sans-serif;
+  --font-title: 'Raleway', sans-serif;
+  --font-sm: 0.9rem;
+  --font-md: 1rem;
+  --font-lg: 1.3rem;
+  --font-xl: 2rem;
 
-	--font-family-base: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-    --font-family-title: "Raleway", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-
-	--font-size-small: 1.2rem;
-	--font-size-medium: 1.6rem;
-	--font-size-large: 1.8rem;
-	--font-size-x-large: 2.3rem;
-	--font-size-xx-large: 4.8rem;
-
-	--font-weight-regular: 400;
-	--font-weight-bold: 700;
-
-	--line-height-small: 1.2;
-	--line-height-base: 1.5;
-	--line-height-big: 1.8;
-
-	--section-header-align: center;
-
-	--section-tagline-transform: uppercase;
-  	--section-tagline-margin: 0;
-
-	--section-title-margin: 0;
-	--section-title-color: var(--color-black);
-
-	--section-padding: 5rem 0;
-	--section-header-padding: 0 0 3rem;
-	--section-body-padding: 0 0 3rem;
-	--section-footer-padding: 3rem 0 0;
-	--section-footer-align: center;
-	--footer-padding: 5rem 0 1rem;
-
-	--nav-item-font-family: var(--font-family-title);
-	--nav-item-font-weight: var(--font-weight-bold);
-	--nav-item-font-size: var(--font-size-medium);
-	--nav-item-letter-spacing: 0.04rem;
-	--nav-item-display: inline-block;
-	--nav-item-margin: 0 0 3rem;
-	--nav-item-link-hover: var(--color-white);
-
-	--button-display: inline-block;
-	--button-padding: 1.5rem 3rem;
-	--button-border: 0.2rem solid var(--color-primary);
-	--button-color: var(--color-black);
-	--button-text-decoration: none;
-	--button-font-size: var(--font-size-large);
-	--button-hover-color: var(--color-white);
-	--button-hover-text-decoration: none;
-	--button-hover-background: var(--color-primary);
-
-  	--header-padding: 4rem 0 0;
-	--header-logo-position: relative;
-	--header-logo-link-display: inline-block;
-	--header-logo-link-position: absolute;
-	--header-logo-link-top: -1rem;
-	--header-logo-link-left: 0;
-
-	--transition-duration: .3s;
-	--transition-cubic-bezier: cubic-bezier(0.17, 0.67, 0, 1.01);
+  /* Layout */
+  --max-width: 1200px;
+  --border-radius: 10px;
+  --spacing: 1rem;
+  --transition: all 0.3s ease-in-out;
 }
 
+/* Base */
 body {
-    background-color: var(--color-bg-light);
-    color: #333;
-	display: flex;
-  	flex-direction: column;
-	min-height: 100vh;
-  	margin: 0;
+  font-family: var(--font-base);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+/* Header */
 header {
-    background-color: var(--color-primary);
-    color: #fff;
-    padding: 1rem;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
+header #logo img {
+  height: 40px;
 }
 
+header nav a {
+  color: var(--text-light);
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+header nav a:hover {
+  color: var(--accent-color);
+}
+
+#login-link, #logout-link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+#logout-link p {
+  margin: 0;
+  color: var(--text-light);
+}
+
+/* Main Layout */
 main {
-    padding: 2rem;
+  flex: 1;
+  padding: 2rem;
 }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  ul.place-info > li {
-	color: var(--color-dark-grey);
-  }
-
-  li {
-    display: block;
-    text-decoration: none;
-  }
-
-.place-card, .review-card, .booking-card {
-  aspect-ratio: 1 / 1;
-  border: 1px solid var(--color-accent);
-  border-radius: 10px;
-  background-color: var(--color-bg-panel);
-  text-align: center;
-
-  /* Removed margin – grid gap handles spacing */
-  padding: 10px;
-
-  width: 100%; /* Take full width of grid column */
-  max-width: none; /* Prevent limiting width inside the grid */
+/* Filter */
+#filter {
+  display: none;
+  background-color: transparent;
+  padding: var(--spacing);
+  border-radius: var(--border-radius);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
-.place-card *, .review-card *, .booking-card * {
-	margin-top: 10px;
+#slide-filter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 40px;            /* spacing between cards */
-  padding-top: 20px;
-  padding-left: 15vw;
-  padding-right: 15vw;      /* spacing from container edges */
-  justify-items: center; /* center cards in their grid cells */
+#bookings-link {
+  font-size: 1rem;
+  color: var(--text-light);
+  text-decoration: none;
 }
 
-#popup-form {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  top: 0;
-  left: 0;
-  width: 80vw; /* Adjust width as needed */
-  height: 80vh; /* Adjust height as needed */
-  margin: auto;
-  background-color: var(--color-bg-light);
-  z-index: 1000; /* Ensure it's on top */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  overflow: auto;
-  inset: 0; /* Center it both vertically and horizontally */
-  border-radius: 10px;
+#greeting {
+  margin: 0;
 }
 
 #popup-bg {
@@ -179,30 +114,450 @@ ul {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Below the form */
+  z-index: 999;
 }
 
-#amenities-header {
-	margin-top: 10px;
-}
-
-
-#login-link, #logout-link {
-	display: flex;
-	justify-content: flex-end;
+#popup-form {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
 .error-text {
-	color: var(--text-error-color);
+  color : var(--error-color);
+}
+
+/* Grid Layout for Places */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 3rem;
+  padding: 2rem 5vw;
+  justify-content: center;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 
-/* Landscape mode: show 3 items per row */
-@media screen and (orientation: landscape) {
-    .grid-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.reviews-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.review-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+  text-align: left;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Styles */
+.place-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.place-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.place-card h3 {
+  font-family: var(--font-title);
+  font-size: var(--font-lg);
+  color: var(--primary-color);
+}
+
+.place-card p {
+  font-size: var(--font-md);
+  color: var(--text-dark);
+}
+
+/* Booking Styles */
+.booking-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.booking-card h3 {
+  font-family: var(--font-title);
+  font-size: var(--font-lg);
+  color: var(--primary-color);
+}
+
+.booking-card p {
+  font-size: var(--font-md);
+  color: var(--text-dark);
+}
+
+/* Review Styles */
+.review-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.review-card h3 {
+  font-family: var(--font-title);
+  font-size: var(--font-lg);
+  color: var(--primary-color);
+}
+
+.review-card p {
+  font-size: var(--font-md);
+  color: var(--text-dark);
+}
+
+.review-section a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-section a:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.details-display {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: var(--transition);
+  margin-top: var(--spacing);
+  font-size: var(--font-sm);
+  text-align: left;
+}
+
+.details-display.visible {
+  max-height: 1000px; /*Tester*/
+  opacity: 1;
+}
+
+.details-display h4 {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo {
+  width: 100px; /* or your preferred size */
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+nav {
+  margin-top: 0.5rem;
+}
+.place-details {
+  background-color: var(--bg-panel);
+  border-radius: var(--border-radius);
+  border: 1px solid;
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.place-infos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.place-infos h3 {
+  font-family: var(--font-title);
+  font-size: var(--font-xl);
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.place-info {
+  font-size: var(--font-md);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+#amenities-header {
+  margin-top: 2rem;
+  font-size: var(--font-lg);
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.class-info {
+  list-style: none;
+  padding-left: 0;
+  font-size: var(--font-md);
+  margin-top: 1rem;
+}
+
+/* Buttons */
+button {
+  padding: 0.6rem 1.2rem;
+  /* background-color: transparent; */
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  /* color: var(--primary-color); */
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+button:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Footer */
+footer {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  text-align: center;
+  padding: 1rem;
+  font-size: var(--font-sm);
+  margin-top: auto;
+}
+
+/* ======= Add Review Page Styles ======= */
+
+#review {
+  width: 66.66%;
+  height: 45vh;
+  max-height: 100%;
+  box-sizing: border-box;
+  resize: none;
+}
+
+#review-form {
+  max-width: 600px;
+  margin: 2rem auto 4rem;
+  padding: 2rem;
+  background-color: var(--bg-panel);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: var(--border-radius);
+  font-family: var(--font-base);
+  color: var(--text-dark);
+}
+
+#review-form h2 {
+  font-family: var(--font-title);
+  font-size: var(--font-xl);
+  margin-bottom: 1.2rem;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+#review-form textarea,
+#review-form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  font-size: var(--font-md);
+  font-family: var(--font-base);
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+}
+
+#review-form textarea:focus,
+#review-form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(210, 93, 93, 0.5);
+  background-color: white;
+}
+
+#review-form label {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+#submit-review {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 0;
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--text-light);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#submit-review:hover,
+#submit-review:focus {
+  background-color: var(--accent-color);
+  outline: none;
+}
+
+/* Header adjustments for consistent alignment and spacing */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header nav a#bookings-link {
+  font-weight: 700;
+  color: var(--text-light);
+  text-decoration: none;
+  margin-left: 1rem;
+  transition: color 0.2s;
+}
+
+header nav a#bookings-link:hover {
+  color: var(--accent-color);
+}
+
+#login-link, #logout-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+#logout-link p {
+  margin: 0;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* Footer consistent styling */
+footer {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  text-align: center;
+  padding: 1rem;
+  font-size: var(--font-sm);
+  margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  #review-form {
+    margin: 1rem 1rem 3rem;
+    padding: 1.5rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header nav a#bookings-link {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  #login-link, #logout-link {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #submit-review {
+    font-size: var(--font-lg);
+  }
+}
+
+
+/* Responsive Fixes */
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    width: 100%;
+  }
 }

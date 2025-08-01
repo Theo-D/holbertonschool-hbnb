@@ -34,30 +34,83 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutButton.addEventListener('click', logoutUser);
   }
 
-  function getCookie(name) {
-      const cookie = document.cookie;
-      if (cookie.startsWith(name)){
-        const cookieArr = cookie.split("=");
-        return cookieArr[1];
-      } else {
-        console.error("invalid cookie name")
-      }
-  }
-
-  // Checks if user is authenticated
-  function isAuth() {
+  function getUserIdFromCookie() {
     const token = getCookie('token');
 
-    if (!token) return false;
-    else return true;
+    if (token.length > 0) {
+      try {
+          jwt = JSON.parse(atob(token.split('.')[1]));
+          const UUID = jwt.sub;;
+          return UUID;
+      } catch (e) {
+          console.error('error: '+e);
+      }
+    };
   };
 
-  // Display login/logout button in regards of user auth
-  function loginUi(isAuth) {
+  async function getUserById(userId) {
+    const jwt = getCookie('token');
+    const url = `http://localhost:5000/api/v1/users/users/${userId}`;
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const placeUserJson = await response.json();
+      return placeUserJson;
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  //Get place with id of current place and returns according jsonified place object.
+  async function getPlace(id) {
+    const jwt = getCookie('token');
+    const url = `http://localhost:5000/api/v1/places/${id}`;
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const placeJson = await response.json();
+      return placeJson;
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  function getCookie(name) {
+    const cookie = document.cookie;
+    if (cookie.startsWith(name)){
+      const cookieArr = cookie.split("=");
+      return cookieArr[1];
+    } else {
+      console.error("invalid cookie name")
+    }
+  }
+
+  function isAuth() {
+    const token = getCookie('token');
+    return !!token;
+  }
+
+  async function loginUi(isAuthenticated) {
     const loginLink = document.getElementById('login-link');
     const logoutLink = document.getElementById('logout-link');
+    const greeting = document.getElementById('greeting');
 
-    if (!isAuth) {
+    if (!isAuthenticated) {
       if (logoutLink && loginLink) {
         loginLink.style.display = 'flex';
         logoutLink.style.display = 'none';
@@ -65,11 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const user = await getUserById(getUserIdFromCookie());
+
+    if (greeting) {
+      const greetText = document.createTextNode(`Bonjour ${user.first_name} ${user.last_name}`);
+      greeting.appendChild(greetText);
+    }
+
     if (logoutLink && loginLink) {
       logoutLink.style.display = 'flex';
       loginLink.style.display = 'none';
     }
-
   }
 
   loginUi(isAuth());
@@ -163,11 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayPlaces(places) {
       const placesList = document.getElementById('places-list');
       const placeGrid = document.createElement('div');
+      const filterSection = document.getElementById('filter');
 
       placesList.innerHTML = '';
       placeGrid.className = 'grid-container';
       placesList.appendChild(placeGrid);
 
+      if (places.length > 0) {
+        filterSection.style.display = 'block';
+      }
       places.forEach(place => {
         const placeElement = document.createElement('div');
         const detailsDiv = document.createElement('div');
@@ -180,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         detailsDiv.className = 'details-display';
-        detailsDiv.style.display = 'none';
         detailsDiv.innerHTML = `
         <h4>Description:</h4>
         <p>${place.description}</p>
@@ -188,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         placeElement.appendChild(detailsDiv);
 
-        //After appending place card, display the details of visible cards
         if (detailsVisibleSet.has(String(place.id))) {
         detailsDiv.style.display = 'block';
         placeElement.querySelector('.details_button').textContent = 'Hide details';
@@ -212,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleIndexPlacesDisplay() {
       const placesList = document.getElementById('places-list');
       if (placesList) {
-        placesList.innerHTML = ''; // Clear previous content
+        placesList.innerHTML = '';
       }
 
       if (!isAuth()) {
@@ -222,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (placesList) {
           placesList.appendChild(errPlaces);
         }
-        return; // Stop here if not authenticated
+        return; // Stop si non authentifié
       }
 
       try {
@@ -288,44 +349,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (loginForm) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            try {
-              await loginUser(email, password);
-            } catch (err) {
-              console.error("Login error:", err);
-              // alert("Something went wrong. Please try again.");
-          }
-        });
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        loginForm.querySelectorAll('.error-text').forEach(el => el.remove());
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          await loginUser(email, password);
+        } catch (err) {
+          console.error("Login error:", err);
+        }
+      });
     }
   }
 
   /*------------------------------ Place Page Functions ------------------------------*/
 
   if (/\/place(\.html)?$/.test(window.location.pathname)) {
-
-    //Get place with id of current place and returns according jsonified place object.
-    async function getPlace(id) {
-      const jwt = getCookie('token');
-      const url = `http://localhost:5000/api/v1/places/${id}`;
-      try {
-        const response = await fetch(url, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
-        }
-        const placeJson = await response.json();
-        return placeJson;
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
 
     async function getPlaceReviews(placeId) {
       const jwt = getCookie('token');
@@ -343,27 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const reviewsJson = await response.json();
         return reviewsJson;
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    async function getPlaceUser(userId) {
-      const jwt = getCookie('token');
-      const url = `http://localhost:5000/api/v1/users/users/${userId}`;
-      try {
-        const response = await fetch(url, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
-        }
-
-        const placeUserJson = await response.json();
-        return placeUserJson;
       } catch (error) {
         console.error(error.message);
       }
@@ -446,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       for (const elem of reviews) {
-        const user = await getPlaceUser(elem.user_id);
+        const user = await getUserById(elem.user_id);
 
         if (elem.review != null) {
           const reviewElem = document.createElement('div');
@@ -524,6 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleFormPost(formData) {
 
       const postUrl = 'http://localhost:5000/api/v1/bookings';
+      const jwt = getCookie('token');
       const numNight = Number(formData.nightCount);
       const numGuest = Number(formData.guestCount);
       const payload = {
@@ -537,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const response = await fetch(postUrl, {
             method: "POST",
             headers: {
-            'Authorization': `Bearer ${getCookie('token')}`,
+            'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json',
             },
             body: jsonData
@@ -601,6 +624,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.appendChild(popupBg);
       document.body.appendChild(form);
 
+      popupBg.addEventListener('click', () => {
+        popupBg.style.display = "none";
+        form.style.display = "none";
+      });
+
       form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -623,6 +651,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (key === 'nightCount') {
             data[key] = parseInt(value);
+            if (data[key] < 1) {
+              const errMsg = document.createElement('p');
+              errMsg.classList.add('error-text');
+              errMsg.textContent = "Veuillez réserver une nuit minimum";
+              form.appendChild(errMsg);
+              hasError = true;
+            }
           }
 
           if (key === 'checkin') {
@@ -645,7 +680,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
           form.reset();
           const booking = await handleFormPost(data);
-          console.log(booking.id)
         }
       });
     };
@@ -669,24 +703,8 @@ document.addEventListener('DOMContentLoaded', () => {
     makePopupForm(currPlaceId)
 
   }
-/*------------------------------ Review page functions ------------------------------*/
+/*------------------------------ Booking page functions ------------------------------*/
   if (window.location.pathname.endsWith("/bookings.html")){
-
-    function getUserIdFromCookie() {
-      const token = getCookie('token');
-      console.log(token);
-
-      if (token.length > 0) {
-        try {
-            jwt = JSON.parse(atob(token.split('.')[1]));
-            const UUID = jwt.sub;
-            console.log(UUID);
-            return UUID;
-        } catch (e) {
-            console.log('error: '+e);
-        }
-      };
-    };
 
     async function getUserBookings() {
       const userId = getUserIdFromCookie();
@@ -718,7 +736,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       gridContainer.classList.add('grid-container');
 
-      bookings.forEach(booking => {
+      for (const booking of bookings) {
+        const place = await getPlace(booking.place_id);
+        const placeTitle = document.createElement('h4');
         const bookingDiv = document.createElement('div');
         const startDate = document.createElement('p');
         const endDate = document.createElement('p');
@@ -727,17 +747,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bookingDiv.classList.add('booking-card');
 
+        placeTitle.textContent = place.title;
         startDate.textContent = `Date Checkin: ${booking.start_date}`;
         endDate.textContent = `Date Checkout: ${booking.end_date}`;
         guestCount.textContent = `Nombre d'invités: ${booking.guest_count}`;
         totalPrice.textContent = `Prix du séjour: ${booking.total_price} €`;
 
+        bookingDiv.appendChild(placeTitle);
         bookingDiv.appendChild(startDate);
         bookingDiv.appendChild(endDate);
         bookingDiv.appendChild(guestCount);
         bookingDiv.appendChild(totalPrice);
-        console.log(`Booking id: ${booking.id}`);
-        // Review (in its own div)
+
         const reviewDiv = document.createElement('div');
         reviewDiv.classList.add('review-section');
 
@@ -752,65 +773,151 @@ document.addEventListener('DOMContentLoaded', () => {
           reviewDiv.appendChild(reviewRating);
         } else {
           const reviewPrompt = document.createElement('a');
-          reviewPrompt.href = `add_review.html?booking_id=${booking.id}`; // Replace with actual link to leave a review
+          const deleteBtn = document.createElement('a');
+          reviewPrompt.href = `add_review.html?booking_id=${booking.id}`;
           reviewPrompt.textContent = "Donnez votre avis";
+          deleteBtn.href = '#';
+          deleteBtn.classList.add('delete-btn');
+          deleteBtn.textContent = "Annulez votre réservation";
+          deleteBtn.dataset.id = booking.id;
+
+          deleteBtn.addEventListener('click', async function(event) {
+            event.preventDefault();
+
+            const jwt = getCookie('token');
+            const bookingId = this.dataset.id;
+            const url = `http://localhost:5000/api/v1/bookings/${bookingId}`;
+
+            try {
+              const response = await fetch( url, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${jwt}`
+                }
+              });
+
+              if (!response.ok) {
+                throw new Error(`Failed to delete booking: ${response.status}`);
+              }
+              const bookingCard = this.closest('.booking-card');
+              if (bookingCard) {
+                bookingCard.remove();
+              }
+            } catch (error) {
+              console.error('Error :', error);
+            }
+          });
+
           reviewDiv.appendChild(reviewPrompt);
+          reviewDiv.appendChild(deleteBtn);
         }
 
         userBookings.appendChild(gridContainer);
         gridContainer.appendChild(bookingDiv);
         bookingDiv.appendChild(reviewDiv);
-      });
+      }
+
     }
 
     displayBookings();
   };
 
-});
-
 /*------------------------------ Add Review page functions ------------------------------*/
 
-if (/\/add_review(\.html)?$/.test(window.location.pathname)) {
+  if (/\/add_review(\.html)?$/.test(window.location.pathname)) {
+
+    const reviewForm = document.getElementById('review-form');
+    const errMsgRev = document.createElement('p');
+    const errMsgRat = document.createElement('p');
+    errMsgRev.classList.add('error-text');
+    errMsgRat.classList.add('error-text');
 
 
-  async function addReview(bookingId, reviewText, reviewRating) {
-    const url = "http://localhot:5000/api/v1/reviews";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify({
-          booking_id: bookingId,
-          text: reviewText,
-          rating: reviewRating
-        }),
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-
-      const json = await response.json();
-      console.log(json);
-    } catch (error) {
-      console.error(error.message);
+    function displayMessage(message) {
+      const errContainer = document.getElementById('review-msg') || document.createElement('p');
+      errContainer.id = 'review-msg';
+      errContainer.style.color = 'red';
+      errContainer.textContent = message;
+      reviewForm.appendChild(errContainer);
     }
-  }
 
-  document.getElementById("submit-review").addEventListener('click', function(event) {
-    event.preventDefault();
-    const bookingId = window.location.search.split('=')[1];
-    const reviewText = document.getElementById("review").value;
-    const rating = parseInt(document.getElementById("rating").value);
+    async function addReview(bookingId, reviewText, reviewRating) {
+      const token = getCookie('token');
+      const url = "http://localhost:5000/api/v1/reviews";
+      const payload = JSON.stringify({
+        booking_id: bookingId,
+        text: reviewText,
+        rating: reviewRating
+      });
 
-    console.log("Booking id: ", bookingId);
-    console.log("Review: ", reviewText);
-    console.log(typeof rating);
-    console.log("Rating: ", rating);
-  });
-};
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          body: payload,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          // Check status and display specific message
+          switch (response.status) {
+            case 400:
+              throw new Error("Requête invalide (400) : Veuillez vérifier votre avis.");
+            case 401:
+              throw new Error("Non autorisé (401) : Veuillez vous reconnecter.");
+            case 403:
+              throw new Error("Accès refusé (403) : Vous n'avez pas les droits.");
+            case 404:
+              throw new Error("Ressource non trouvée (404).");
+            case 409:
+              throw new Error("Conflit (409) : Avis déjà existant.");
+            case 500:
+              throw new Error("Erreur serveur (500) : Réessayez plus tard.");
+            default:
+              throw new Error(`Erreur inconnue : ${response.status}`);
+          }
+        }
+
+        const json = await response.json();
+        displayMessage("Merci pour votre avis.");
+        return true;
+
+      } catch (error) {
+        console.error("Erreur lors de l'envoi de l'avis :", error.message);
+        displayMessage(error.message); // Function to show error to user
+        return false;
+      }
+    }
+
+    document.getElementById("submit-review").addEventListener('click', async function(event) {
+      event.preventDefault();
+      const bookingId = window.location.search.split('=')[1];
+      const reviewText = document.getElementById("review").value;
+      const rating = parseInt(document.getElementById("rating").value);
+
+      reviewForm.reset();
+      errMsgRev.textContent = '';
+      errMsgRat.textContent = '';
+
+      if (isNaN(rating)) {
+        errMsgRat.textContent = "Veuillez sélectionner une note.";
+        reviewForm.appendChild(errMsgRat);
+      };
+
+      if (reviewText.length === 0 || reviewText === null) {
+        errMsgRev.textContent = "Veuillez donner votre avis.";
+        reviewForm.appendChild(errMsgRev);
+      };
+
+     await addReview(bookingId, reviewText, rating);
+
+    });
+  };
+
+});
 
 
 /*------------------------------ Additionnal Event Listeners ------------------------------*/
@@ -823,12 +930,14 @@ document.addEventListener('click', function(event) {
     const detailsDiv = card.querySelector('.details-display');
     const detailsButton = card.querySelector('.details_button');
 
-    if (detailsDiv.style.display === 'block') {
-      detailsDiv.style.display = 'none';
+    const isVisible = detailsDiv.classList.contains('visible');
+
+    if (isVisible) {
+      detailsDiv.classList.remove('visible');
       detailsButton.textContent = 'View details';
       detailsVisibleSet.delete(placeId);
     } else {
-      detailsDiv.style.display = 'block';
+      detailsDiv.classList.add('visible');
       detailsButton.textContent = 'Hide details';
       detailsVisibleSet.add(placeId);
     }

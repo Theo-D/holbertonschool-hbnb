@@ -1,0 +1,6 @@
+database: ../instance/development.db
+
+DELETE FROM bookings
+WHERE id NOT IN (
+    SELECT booking_id FROM reviews WHERE booking_id IS NOT NULL
+);

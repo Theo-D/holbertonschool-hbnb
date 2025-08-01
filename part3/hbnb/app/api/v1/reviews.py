@@ -29,7 +29,7 @@ review_input = ns.model(
     },
 )
 
-@ns.route("/")
+@ns.route("")
 class ReviewList(Resource):
     @ns.doc(
         "list_reviews",
@@ -83,8 +83,8 @@ class ReviewList(Resource):
             ns.abort(403, "Unauthorized action")
 
         # Prevent reviewing own place (if booking owner is also host)
-        if booking.place.host.id == current_user:
-            ns.abort(400, "You cannot review your own place.")
+        # if booking.place.host.id == current_user:
+        #     ns.abort(400, "You cannot review your own place.")
 
         # Validate text
         text = payload.get("text", "").strip()
