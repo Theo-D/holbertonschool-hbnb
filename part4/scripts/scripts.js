@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         placeElement.innerHTML = `
           <h3>${place.title}</h3>
           <p>${place.price}€ la nuit.</p>
-          <button class="details_button" data-id="${place.id}" type="button">View details</button>
+          <button class="details_button" data-id="${place.id}" type="button">Voir détails</button>
         `;
 
         detailsDiv.className = 'details-display';
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (detailsVisibleSet.has(String(place.id))) {
         detailsDiv.style.display = 'block';
-        placeElement.querySelector('.details_button').textContent = 'Hide details';
+        placeElement.querySelector('.details_button').textContent = 'Masquer détails';
         }
 
         placeGrid.appendChild(placeElement);
@@ -934,11 +934,11 @@ document.addEventListener('click', function(event) {
 
     if (isVisible) {
       detailsDiv.classList.remove('visible');
-      detailsButton.textContent = 'View details';
+      detailsButton.textContent = 'Voir détails';
       detailsVisibleSet.delete(placeId);
     } else {
       detailsDiv.classList.add('visible');
-      detailsButton.textContent = 'Hide details';
+      detailsButton.textContent = 'Masquer détails';
       detailsVisibleSet.add(placeId);
     }
   }
